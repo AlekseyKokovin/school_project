@@ -155,8 +155,7 @@ def open_board(board):
     for y in range(len(board)):
         for x in range(len(board[0])):
             active, opened, number, flag = board[y][x].split()
-            if flag != 'yes':
-                board[y][x] = f"{active} yes {number} {flag}"
+            board[y][x] = f"{active} yes {number} no"
     return board
 
 
