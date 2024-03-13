@@ -96,14 +96,14 @@ def get_amount_of_mines(width, height):
             amount_of_mines_check = float(amount_of_mines)
             amount_of_mines = int(amount_of_mines)
             if width * height <= amount_of_mines:
-                print('Количество мин меньше или равно размеру поля, неправильное значение')
+                print('Количество мин меньше или равно размеру поля')
             if amount_of_mines <= 0 or amount_of_mines != amount_of_mines_check or width * height <= amount_of_mines:
                 raise AssertionError
             return amount_of_mines
         except ValueError:
             print('неправильный тип числа')
             amount_of_mines = input()
-        except Exception:
+        except AssertionError:
             print('Неправильное число, введите повторно')
             amount_of_mines = input()
 
@@ -168,7 +168,7 @@ is_active = True
 while True:
     input_user = input()
     try:
-        if len(input_user.split()) == 1 or len(input_user.split()) == 2:
+        if len(input_user.split()) == 1:
             type_of_move = input_user.split()[0]
             if type_of_move.lower() == 'начать_заново':
                 width, height = get_width(), get_height()
@@ -182,24 +182,32 @@ while True:
                 print('игра закончена')
                 break
             elif type_of_move.lower() == 'поменять_количество_мин':
-                width, height = get_width(), get_height()
                 amount_of_mines = get_amount_of_mines(width, height)
                 board = Board(amount_of_mines, width, height)
                 print_board(board.board)
             elif type_of_move.lower() == 'поменять_ширину':
                 width = get_width()
+                while True:
+                    if width * height <= amount_of_mines:
+                        print('Слишком маленькая ширина')
+                        width = get_width()
+                    else:
+                        break
                 board = Board(amount_of_mines, width, height)
                 print_board(board.board)
             elif type_of_move.lower() == 'поменять_высоту':
                 height = get_height()
+                while True:
+                    if width * height <= amount_of_mines:
+                        print('Слишком маленькая высота')
+                        height = get_height()
+                    else:
+                        break
                 board = Board(amount_of_mines, width, height)
                 print_board(board.board)
             else:
                 raise AssertionError
-        elif is_active:
-            line = False
-            column = False
-            type_of_move = False
+        elif is_active and len(input_user.split()) == 3:
             line, column, type_of_move = input_user.split()
             line = int(line) - 1
             column = int(column) - 1
@@ -239,10 +247,15 @@ while True:
                         board.board = open_board(board.board)
                         is_active = False
                     print_board(board.board)
-            else:
-                raise AssertionError
+        elif not is_active:
+            print('начните игру заново (команда - начать_заново)')
+            continue
+        elif not input_user:
+            raise ValueError
+        elif len(input_user) > 3:
+            raise AssertionError
     except ValueError:
-        if not line:
+        if not input_user:
             print('чтобы программа работала, нужно что-то ввести')
         elif ((isinstance(line, tuple) or isinstance(column, tuple) or isinstance(line, str) or isinstance(column, str))
               and isinstance(type_of_move, str)):
