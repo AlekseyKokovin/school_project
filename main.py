@@ -169,7 +169,7 @@ while True:
     input_user = input()
     try:
         if len(input_user.split()) == 1:
-            type_of_move = input_user.split()[0]
+            type_of_move = input_user
             if type_of_move.lower() == 'начать_заново':
                 width, height = get_width(), get_height()
                 amount_of_mines = get_amount_of_mines(width, height)
