@@ -168,7 +168,7 @@ is_active = True
 while True:
     input_user = input()
     try:
-        if len(input_user.split()) == 1:
+        if is_active and len(input_user.split()) == 1:
             type_of_move = input_user
             if type_of_move.lower() == 'начать_заново':
                 width, height = get_width(), get_height()
