@@ -1,3 +1,4 @@
+from pprint import pprint
 from random import sample
 
 
@@ -168,7 +169,7 @@ is_active = True
 while True:
     input_user = input()
     try:
-        if is_active and len(input_user.split()) == 1:
+        if len(input_user.split()) == 1:
             type_of_move = input_user
             if type_of_move.lower() == 'начать_заново':
                 width, height = get_width(), get_height()
@@ -181,11 +182,11 @@ while True:
             elif type_of_move.lower() == 'закончить':
                 print('игра закончена')
                 break
-            elif type_of_move.lower() == 'поменять_количество_мин':
+            elif is_active and type_of_move.lower() == 'поменять_количество_мин':
                 amount_of_mines = get_amount_of_mines(width, height)
                 board = Board(amount_of_mines, width, height)
                 print_board(board.board)
-            elif type_of_move.lower() == 'поменять_ширину':
+            elif is_active and type_of_move.lower() == 'поменять_ширину':
                 width = get_width()
                 while True:
                     if width * height <= amount_of_mines:
@@ -195,7 +196,7 @@ while True:
                         break
                 board = Board(amount_of_mines, width, height)
                 print_board(board.board)
-            elif type_of_move.lower() == 'поменять_высоту':
+            elif is_active and type_of_move.lower() == 'поменять_высоту':
                 height = get_height()
                 while True:
                     if width * height <= amount_of_mines:
@@ -211,6 +212,10 @@ while True:
             line, column, type_of_move = input_user.split()
             line = int(line) - 1
             column = int(column) - 1
+            if line <= -1:
+                raise IndexError
+            if column <= -1:
+                raise IndexError
             if board.board[line][column].split()[1] == 'yes':
                 print('ячейка уже открыта')
                 continue
@@ -262,3 +267,5 @@ while True:
             print('число строки/столбца должно быть типа int')
     except AssertionError:
         print('команда не распознана, введите заново')
+    except IndexError:
+        print('индекс ряда или столбца неправильный')
