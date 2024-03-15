@@ -252,6 +252,8 @@ while True:
                         board.board = open_board(board.board)
                         is_active = False
                     print_board(board.board)
+            else:
+                raise AssertionError
         elif not is_active:
             print('начните игру заново (команда - начать_заново)')
             continue
